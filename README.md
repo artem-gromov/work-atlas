@@ -37,6 +37,10 @@ the raw schema at `/api/schema/`.
 - `POST /api/v1/profiles/` – create or update your own profile including avatar
   upload. When an avatar is absent a gravatar URL is used.
 
+When a profile's location precision is set to `CITY`, the API returns a point
+randomly offset up to 5 km from the stored coordinates while keeping the `city`
+and `country` fields intact.
+
 ### Company
 
 - `GET/PUT /api/v1/company/` – retrieve or update company display name, logo and
@@ -65,18 +69,18 @@ Django file storage backend.
 
 ## Testing
 
-Run the test suite using the lightweight SpatiaLite configuration:
+Tests can run either against a PostGIS container or locally with SpatiaLite
+when the module is available.
+
+Run against PostGIS:
+
+```bash
+make up && pytest
+```
+
+Run locally with SpatiaLite:
 
 ```bash
 pytest
-```
-
-This uses `config.settings.test` and requires no running PostgreSQL instance. To
-run tests against a real PostGIS database instead, start the containers and set
-the settings module:
-
-```bash
-make up
-DJANGO_SETTINGS_MODULE=config.settings.local pytest
 ```
 

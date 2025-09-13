@@ -1,4 +1,8 @@
+import math
+import random
+
 from django.contrib.auth import get_user_model
+from django.contrib.gis.geos import Point
 from rest_framework import serializers
 
 from companies.models import Company
@@ -40,9 +44,27 @@ class EmployeeProfileSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         if not instance.visible:
             return {"id": instance.id}
-        if instance.precision in {"HIDDEN", "CITY"} and "location" in data:
-            # Hide exact coordinates unless precision explicitly set to EXACT
-            data.pop("location")
+        if "location" in data and instance.location:
+            if instance.precision == "HIDDEN":
+                # Hide exact coordinates completely
+                data.pop("location")
+            elif instance.precision == "CITY":
+                # Randomize coordinates within a 5 km radius
+                radius_km = 5
+                distance = random.uniform(0, radius_km)
+                angle = random.uniform(0, 2 * math.pi)
+                delta_lat = (distance / 111) * math.cos(angle)
+                delta_lon = (
+                    (distance / 111) * math.sin(angle) / math.cos(math.radians(instance.location.y))
+                )
+                point = Point(
+                    instance.location.x + delta_lon,
+                    instance.location.y + delta_lat,
+                )
+                data["location"] = {
+                    "type": "Point",
+                    "coordinates": [point.x, point.y],
+                }
         return data
 
 
