@@ -71,7 +71,7 @@ DATABASES = {
 AUTH_USER_MODEL = "accounts.User"
 
 TENANT_MODEL = "tenancy.Tenant"
-TENANT_DOMAIN_MODEL = "tenancy.Tenant"
+TENANT_DOMAIN_MODEL = "tenancy.Domain"
 DATABASE_ROUTERS = ["django_tenants.routers.TenantSyncRouter"]
 
 REST_FRAMEWORK = {
