@@ -19,5 +19,21 @@ Create the first tenant:
 python manage.py create_tenant --name "Acme" --domain acme.app.local --schema acme
 ```
 
-OpenAPI docs are available at `http://<tenant>.app.local:8000/api/docs/`.
+OpenAPI docs are available at `http://<tenant>.app.local:8000/api/docs/` and
+the raw schema at `/api/schema/`.
+
+## File storage
+
+In production the project can store uploaded files on S3. Configure the
+following environment variables (see `.env.example`):
+
+```
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+AWS_STORAGE_BUCKET_NAME
+AWS_S3_REGION_NAME
+```
+
+When developing locally files are stored under `media/` using the default
+Django file storage backend.
 
