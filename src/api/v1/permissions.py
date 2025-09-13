@@ -7,3 +7,14 @@ class IsOwnerOrAdmin(permissions.BasePermission):
             return True
         return obj.user == request.user
 
+
+class IsTenantAdmin(permissions.BasePermission):
+    """Allow access only to users belonging to TENANT_ADMIN group."""
+
+    def has_permission(self, request, view):
+        user = request.user
+        return bool(
+            user
+            and user.is_authenticated
+            and user.groups.filter(name="TENANT_ADMIN").exists()
+        )
