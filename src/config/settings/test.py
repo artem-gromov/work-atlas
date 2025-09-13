@@ -8,11 +8,15 @@ DATABASES = {
     }
 }
 
-SPATIALITE_LIBRARY_PATH = env("SPATIALITE_LIBRARY_PATH", default="mod_spatialite")
+SPATIALITE_LIBRARY_PATH = env(  # noqa: F405
+    "SPATIALITE_LIBRARY_PATH", default="mod_spatialite"
+)
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
-# Simplify configuration for the lightweight spatialite test setup
+INSTALLED_APPS = ["django.contrib.admin"] + SHARED_APPS + TENANT_APPS  # noqa: F405
+
 MIDDLEWARE = [
+    "django_tenants.middleware.main.TenantMainMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -21,20 +25,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
 ]
 
-SHARED_APPS = [
-    "django.contrib.contenttypes",
-    "django.contrib.auth",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
-    "tenancy",
-    "accounts",
-]
+DATABASE_ROUTERS = ["django_tenants.routers.TenantSyncRouter"]
 
-TENANT_APPS = ["profiles", "companies"]
-
-INSTALLED_APPS = ["django.contrib.admin"] + SHARED_APPS + TENANT_APPS
-
-DATABASE_ROUTERS = []
 TENANT_MODEL = "tenancy.Tenant"
-TENANT_DOMAIN_MODEL = "tenancy.Tenant"
+TENANT_DOMAIN_MODEL = "tenancy.Domain"
