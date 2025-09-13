@@ -63,3 +63,20 @@ AWS_S3_REGION_NAME
 When developing locally files are stored under `media/` using the default
 Django file storage backend.
 
+## Testing
+
+Run the test suite using the lightweight SpatiaLite configuration:
+
+```bash
+pytest
+```
+
+This uses `config.settings.test` and requires no running PostgreSQL instance. To
+run tests against a real PostGIS database instead, start the containers and set
+the settings module:
+
+```bash
+make up
+DJANGO_SETTINGS_MODULE=config.settings.local pytest
+```
+
