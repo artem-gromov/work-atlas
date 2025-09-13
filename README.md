@@ -22,6 +22,32 @@ python manage.py create_tenant --name "Acme" --domain acme.app.local --schema ac
 OpenAPI docs are available at `http://<tenant>.app.local:8000/api/docs/` and
 the raw schema at `/api/schema/`.
 
+### Authentication
+
+- `POST /api/v1/auth/register/` – create a user in the current tenant and
+  receive a pair of JWT tokens. A verification link is printed to the console
+  email backend.
+- `POST /api/v1/auth/jwt/create/`, `/refresh/`, `/verify/` – standard
+  SimpleJWT endpoints.
+
+### Profiles
+
+- `GET /api/v1/profiles/` – list active and visible profiles. Supports filters
+  `q`, `city`, `country`, `near=<lat,lon>`, and `radius_km=<km>`.
+- `POST /api/v1/profiles/` – create or update your own profile including avatar
+  upload. When an avatar is absent a gravatar URL is used.
+
+### Company
+
+- `GET/PUT /api/v1/company/` – retrieve or update company display name, logo and
+  privacy policy (admin only).
+
+### Import employees
+
+- `POST /api/v1/employees/import/` – upload a CSV file with columns
+  `email,name,title,city,country,lat,lon` to create or update employees within
+  the current tenant.
+
 ## File storage
 
 In production the project can store uploaded files on S3. Configure the
