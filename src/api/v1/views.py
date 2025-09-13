@@ -20,7 +20,7 @@ from companies.models import Company
 from profiles.models import EmployeeProfile
 from tenancy.models import Domain, Tenant
 
-from .permissions import IsOwnerOrAdmin
+from .permissions import IsOwnerOrAdmin, IsTenantAdmin
 from .serializers import (
     CompanySerializer,
     EmployeeProfileSerializer,
@@ -137,14 +137,14 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
 class CompanyView(generics.RetrieveUpdateAPIView):
     serializer_class = CompanySerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsTenantAdmin]
 
     def get_object(self):
-        return Company.objects.first()
+        return Company.objects.get(tenant=self.request.tenant)
 
 
 class EmployeeImportAPIView(generics.GenericAPIView):
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsTenantAdmin]
     parser_classes = [parsers.MultiPartParser]
 
     def post(self, request, *args, **kwargs):

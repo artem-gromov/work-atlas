@@ -40,7 +40,8 @@ class EmployeeProfileSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         if not instance.visible:
             return {"id": instance.id}
-        if instance.precision == "HIDDEN" and "location" in data:
+        if instance.precision in {"HIDDEN", "CITY"} and "location" in data:
+            # Hide exact coordinates unless precision explicitly set to EXACT
             data.pop("location")
         return data
 
