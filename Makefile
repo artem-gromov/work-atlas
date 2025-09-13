@@ -1,14 +1,14 @@
 .PHONY: format lint test up down migrate makemigrations
 
 format:
-black src
-isort src
+	black src
+	isort src
 
 lint:
 	flake8 src
 
 test:
-pytest --cov=src
+	pytest --cov=src
 
 up:
 	docker-compose up -d
@@ -21,4 +21,3 @@ migrate:
 
 makemigrations:
 	python manage.py makemigrations
-
