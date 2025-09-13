@@ -1,13 +1,14 @@
 .PHONY: format lint test up down migrate makemigrations
 
 format:
-	pre-commit run --files $(shell git ls-files '*.py')
+black src
+isort src
 
 lint:
 	flake8 src
 
 test:
-	pytest -q
+pytest --cov=src
 
 up:
 	docker-compose up -d
